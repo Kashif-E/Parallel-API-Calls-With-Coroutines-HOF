@@ -11,13 +11,11 @@ class ViewModel :ViewModel(){
 
 
     fun doSomeApiCalls() {
-        repository.returnSomeItems { humans, animals ->
 
+        repository.returnSomeItems{human, animal ->
 
-            Log.e("humans", "$humans")
-
-            Log.e("Animals", "$animals")
-
+            Log.e("humans", human.toString())
+            Log.e("animals", animal.toString())
         }
     }
 }

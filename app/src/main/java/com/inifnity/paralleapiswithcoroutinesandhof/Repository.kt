@@ -6,34 +6,32 @@ import kotlinx.coroutines.*
 class Repository {
 
 
-    fun returnSomeItems(returnData:(humans: List<Human>, animals: List<Animal>)-> Unit ){
+    fun returnSomeItems(result: (human: List<Human>, animal: List<Animal>) -> Unit) {
+
         CoroutineScope(Dispatchers.IO).launch {
-             val animal = async {
-                 Log.e("calling ", "get animals")
-                 getAnimals()
-             }
-            val  humans= async {
-                Log.e("calling ", "get humans")
+            val humansResponse = async {
+                Log.e("calling", "humans")
                 getHumans()
             }
+            val animalsResponse = async {
 
-            val humanResponse = humans.await()
+                Log.e("calling", "animals")
+                getAnimals()
+            }
+            val humans = humansResponse.await()
+            val animals = animalsResponse.await()
 
-            val animalResponse = animal.await()
-
-            returnData(
-                humanResponse,
-                animalResponse
-            )
-
+            result(humans, animals)
 
         }
+
+
     }
 
-    suspend fun getHumans() : List<Human>{
+    suspend fun getHumans(): List<Human> {
 
         val list = mutableListOf<Human>()
-        for (i in 1..10){
+        for (i in 1..10) {
 
             list.add(
                 Human(
@@ -44,13 +42,13 @@ class Repository {
         }
         delay(1000)
         Log.e("sending ", "get humans")
-        return  list
+        return list
     }
 
-    suspend fun getAnimals(): List<Animal>{
+    suspend fun getAnimals(): List<Animal> {
 
         val list = mutableListOf<Animal>()
-        for (i in 1..10){
+        for (i in 1..10) {
 
             list.add(
                 Animal(
@@ -61,6 +59,6 @@ class Repository {
         }
         delay(3000)
         Log.e("sending ", "get animals")
-        return  list
+        return list
     }
 }
